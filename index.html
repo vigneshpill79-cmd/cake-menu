@@ -37,6 +37,7 @@
       width: 340px;
       height: 340px;
       background: transparent;
+      --poster-color: transparent;
     }
     .card {
       background: rgba(255,255,255,0.05);
@@ -96,6 +97,8 @@
 
   <model-viewer
     src="3DModel (8).glb"
+    ar
+    ar-modes="scene-viewer webxr quick-look"
     auto-rotate
     camera-controls
     shadow-intensity="1"
