@@ -1,117 +1,273 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3D Cake Menu</title>
-  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chill Out Cafe – AR Menu</title>
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d0b09;
+      --surface:   #1a1410;
+      --surface2:  #221c14;
+      --gold:      #c9973a;
+      --gold-soft: #e6c278;
+      --cream:     #f5ede0;
+      --muted:     #7a6a58;
+      --border:    #2e2218;
+    }
+
     body {
-      background: linear-gradient(135deg, #1a0a00, #3b1a0a);
+      background: var(--bg);
+      color: var(--cream);
+      font-family: 'Inter', sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      font-family: 'Georgia', serif;
-      color: #fff;
+      padding-bottom: 40px;
     }
-    .header {
-      text-align: center;
-      margin-bottom: 10px;
-    }
-    .header h1 {
-      font-size: 2rem;
-      color: #f5c518;
-      letter-spacing: 2px;
-      text-shadow: 0 0 20px rgba(245,197,24,0.5);
-    }
-    .header p {
-      font-size: 0.9rem;
-      color: #c8a97e;
-      margin-top: 4px;
-      letter-spacing: 1px;
-    }
-    model-viewer {
-      width: 340px;
-      height: 340px;
-      background: transparent;
-      --poster-color: transparent;
-    }
-    .card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(245,197,24,0.3);
-      border-radius: 20px;
-      padding: 20px 30px;
-      text-align: center;
-      backdrop-filter: blur(10px);
-      margin-top: 5px;
-      width: 320px;
-    }
-    .item-name {
-      font-size: 1.4rem;
-      color: #f5c518;
-      font-weight: bold;
-      letter-spacing: 1px;
-    }
-    .item-desc {
-      font-size: 0.85rem;
-      color: #c8a97e;
-      margin: 8px 0 14px 0;
-      line-height: 1.5;
-    }
-    .price {
-      font-size: 2rem;
-      color: #fff;
-      font-weight: bold;
-    }
-    .price span {
-      font-size: 1rem;
-      color: #c8a97e;
-    }
+
+    .header { width: 100%; text-align: center; padding: 28px 20px 0; }
     .badge {
       display: inline-block;
-      background: #f5c518;
-      color: #1a0a00;
-      font-size: 0.7rem;
-      font-weight: bold;
-      padding: 3px 10px;
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      padding: 4px 14px;
       border-radius: 20px;
-      margin-top: 10px;
-      letter-spacing: 1px;
+      margin-bottom: 12px;
     }
-    .footer {
-      margin-top: 18px;
+    .cafe-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 7vw, 2.8rem);
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--gold-soft) 0%, var(--gold) 60%, #8b5e1a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.15;
+    }
+    .cafe-sub {
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 6px;
+    }
+    .divider {
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 18px auto;
+    }
+    .menu-label {
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .menu-items {
+      width: 100%;
+      max-width: 440px;
+      padding: 0 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .item-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .item-card model-viewer {
+      width: 100%;
+      height: 260px;
+      background: radial-gradient(ellipse at center, #2a1f12 0%, #0d0b09 75%);
+      --progress-bar-color: var(--gold);
+      --progress-mask: transparent;
+      display: block;
+    }
+    .item-card model-viewer::part(default-ar-button) { display: none; }
+    .item-info { padding: 14px 16px 16px; }
+    .item-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .item-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1.2;
+    }
+    .item-price {
+      display: flex;
+      align-items: baseline;
+      gap: 2px;
+      flex-shrink: 0;
+    }
+    .price-rs { font-size: 0.8rem; color: var(--muted); font-weight: 300; }
+    .price-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--gold-soft);
+    }
+    .ar-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 13px 0;
+      background: linear-gradient(135deg, var(--gold) 0%, #a87828 100%);
+      color: #0d0b09;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 0.88rem;
+      letter-spacing: 0.4px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(201,151,58,0.3);
+      transition: transform 0.15s;
+    }
+    .ar-btn:active { transform: scale(0.97); }
+    .ar-btn.inactive { background: var(--surface2); color: var(--muted); box-shadow: none; }
+    .ar-icon { width: 18px; height: 18px; flex-shrink: 0; }
+    .ar-note {
       font-size: 0.7rem;
-      color: rgba(200,169,126,0.5);
-      letter-spacing: 1px;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 8px;
+      display: none;
+    }
+    .hint {
+      margin-top: 20px;
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.7;
+    }
+    .hint span { color: var(--gold-soft); }
+    .footer {
+      margin-top: 36px;
+      font-size: 0.62rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #3a2e22;
+      text-align: center;
     }
   </style>
 </head>
 <body>
+
   <div class="header">
-    <h1>✦ DESSERT MENU ✦</h1>
-    <p>Scan · View · Savour</p>
+    <div class="badge">AR Digital Menu</div>
+    <div class="cafe-name">Chill Out Cafe</div>
+    <div class="cafe-sub">Scan · Explore · Order</div>
   </div>
 
-  <model-viewer
-    src="3DModel (8).glb"
-    ar
-    ar-modes="scene-viewer webxr quick-look"
-    auto-rotate
-    camera-controls
-    shadow-intensity="1"
-    exposure="1.2">
-  </model-viewer>
+  <div class="divider"></div>
+  <div class="menu-label">Our Specialties</div>
 
-  <div class="card">
-    <div class="item-name">🍫 Chocolate Dream Cake</div>
-    <div class="item-desc">Rich dark chocolate layers with creamy ganache frosting. A slice of pure indulgence.</div>
-    <div class="price">₹99 <span>/ slice</span></div>
-    <div class="badge">⭐ BESTSELLER</div>
+  <div class="menu-items">
+
+    <div class="item-card">
+      <model-viewer
+        id="viewer-cake"
+        src="https://raw.githubusercontent.com/vigneshpill79-cmd/cake-menu/main/3DModel%20(8).glb"
+        alt="Dark Temptation Cake"
+        ar ar-modes="webxr scene-viewer quick-look"
+        camera-controls auto-rotate auto-rotate-delay="800"
+        rotation-per-second="18deg"
+        shadow-intensity="1" exposure="0.9" loading="eager"
+      ></model-viewer>
+      <div class="item-info">
+        <div class="item-top">
+          <div class="item-name">Dark Temptation Cake</div>
+          <div class="item-price">
+            <span class="price-rs">₹</span>
+            <span class="price-num">99</span>
+          </div>
+        </div>
+        <button class="ar-btn" id="ar-btn-cake" onclick="activateAR('viewer-cake','ar-note-cake','ar-btn-cake')">
+          <svg class="ar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+            <line x1="12" y1="22.08" x2="12" y2="12"/>
+          </svg>
+          View in AR
+        </button>
+        <div class="ar-note" id="ar-note-cake">AR needs Android with ARCore. 3D rotate works on all phones! 👆</div>
+      </div>
+    </div>
+
+    <div class="item-card">
+      <model-viewer
+        id="viewer-chips"
+        src="https://raw.githubusercontent.com/vigneshpill79-cmd/chips-menu/main/3DModel%20(6).glb"
+        alt="Chips"
+        ar ar-modes="webxr scene-viewer quick-look"
+        camera-controls auto-rotate auto-rotate-delay="800"
+        rotation-per-second="18deg"
+        shadow-intensity="1" exposure="0.9" loading="eager"
+      ></model-viewer>
+      <div class="item-info">
+        <div class="item-top">
+          <div class="item-name">Crispy Chips</div>
+          <div class="item-price">
+            <span class="price-rs">₹</span>
+            <span class="price-num">50</span>
+          </div>
+        </div>
+        <button class="ar-btn" id="ar-btn-chips" onclick="activateAR('viewer-chips','ar-note-chips','ar-btn-chips')">
+          <svg class="ar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+            <line x1="12" y1="22.08" x2="12" y2="12"/>
+          </svg>
+          View in AR
+        </button>
+        <div class="ar-note" id="ar-note-chips">AR needs Android with ARCore. 3D rotate works on all phones! 👆</div>
+      </div>
+    </div>
+
   </div>
 
-  <div class="footer">Rotate & zoom to explore · Powered by WebAR</div>
+  <p class="hint">
+    <span>Pinch to zoom · Drag to rotate</span><br>
+    Tap "View in AR" to place dish on your table
+  </p>
+
+  <div class="footer">Powered by MenuVerse · AR Digital Menu</div>
+
+  <script>
+    function activateAR(viewerId, noteId, btnId) {
+      const viewer = document.getElementById(viewerId);
+      const note   = document.getElementById(noteId);
+      const btn    = document.getElementById(btnId);
+      if (viewer.canActivateAR) {
+        viewer.activateAR();
+      } else {
+        note.style.display = 'block';
+        btn.classList.add('inactive');
+      }
+    }
+  </script>
+
 </body>
 </html>
